@@ -154,7 +154,7 @@
 <body>
 
 <header>
-    <div class="taxi-icon">🚕</div>
+    <div class="taxi-icon"></div>
     <div>
         <h1>NYC Taxi Explorer</h1>
         <span>2,827,108 trips · January 2024 · Real-time Analytics</span>
@@ -197,25 +197,25 @@
 
     <div class="charts-grid">
         <div class="chart-card">
-            <h3>📊 Trips by Borough</h3>
+            <h3>Trips by Borough</h3>
             <div class="chart-container">
                 <canvas id="boroughChart"></canvas>
             </div>
         </div>
         <div class="chart-card">
-            <h3>🕐 Trips by Hour of Day</h3>
+            <h3> Trips by Hour of Day</h3>
             <div class="chart-container">
                 <canvas id="hourChart"></canvas>
             </div>
         </div>
         <div class="chart-card">
-            <h3>📅 Trips by Day of Week</h3>
+            <h3> Trips by Day of Week</h3>
             <div class="chart-container">
                 <canvas id="dayChart"></canvas>
             </div>
         </div>
         <div class="chart-card">
-            <h3>💰 Average Fare by Borough</h3>
+            <h3> Average Fare by Borough</h3>
             <div class="chart-container">
                 <canvas id="fareChart"></canvas>
             </div>
@@ -223,7 +223,7 @@
     </div>
 
     <div class="table-card">
-        <h3>🗺️ Borough Statistics</h3>
+        <h3> Borough Statistics</h3>
         <table>
             <thead>
                 <tr>
@@ -242,7 +242,7 @@
     </div>
 
     <div class="table-card">
-        <h3>🛣️ Top Routes</h3>
+        <h3> Top Routes</h3>
         <table>
             <thead>
                 <tr>
@@ -341,3 +341,162 @@ async function loadCharts(borough = '') {
 
     if (byBorough) {
         if (boroughChart) boroughChart.destroy();
+        boroughChart = new Chart(document.getElementById('boroughChart'), {
+            type: 'doughnut',
+            data: {
+                labels: byBorough.map(r => r.borough),
+                datasets: [{
+                    data: byBorough.map(r => r.total_trips),
+                    backgroundColor: colors,
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { labels: { color: '#e2e8f0' } } }
+            }
+        });
+
+        if (fareChart) fareChart.destroy();
+        fareChart = new Chart(document.getElementById('fareChart'), {
+            type: 'bar',
+            data: {
+                labels: byBorough.map(r => r.borough),
+                datasets: [{
+                    label: 'Avg Fare ($)',
+                    data: byBorough.map(r => r.avg_fare),
+                    backgroundColor: '#f7c948',
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { labels: { color: '#e2e8f0' } } },
+                scales: {
+                    x: { ticks: { color: '#94a3b8' }, grid: { color: '#1e293b' } },
+                    y: { ticks: { color: '#94a3b8' }, grid: { color: '#334155' } }
+                }
+            }
+        });
+
+        const tbody = document.getElementById('borough-table');
+        tbody.innerHTML = byBorough.map(r => `
+            <tr>
+                <td>
+                    <span class="borough-badge ${r.borough.split(' ')[0]}">
+                        ${r.borough}
+                    </span>
+                </td>
+                <td>${Number(r.total_trips).toLocaleString()}</td>
+                <td>$${r.avg_fare}</td>
+                <td>${r.avg_distance} mi</td>
+                <td>${r.avg_duration} min</td>
+                <td>${r.avg_tip_pct}%</td>
+            </tr>
+        `).join('');
+    }
+
+    if (byHour) {
+        if (hourChart) hourChart.destroy();
+        hourChart = new Chart(document.getElementById('hourChart'), {
+            type: 'line',
+            data: {
+                labels: byHour.map(r => r.hour_of_day + ':00'),
+                datasets: [{
+                    label: 'Total Trips',
+                    data: byHour.map(r => r.total_trips),
+                    borderColor: '#f7c948',
+                    backgroundColor: 'rgba(247,201,72,0.1)',
+                    fill: true,
+                    tension: 0.4,
+                    pointBackgroundColor: '#f7c948'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { labels: { color: '#e2e8f0' } } },
+                scales: {
+                    x: { ticks: { color: '#94a3b8' }, grid: { color: '#1e293b' } },
+                    y: { ticks: { color: '#94a3b8' }, grid: { color: '#334155' } }
+                }
+            }
+        });
+    }
+
+    if (byDay) {
+        if (dayChart) dayChart.destroy();
+        const dayOrder = [
+            'Monday','Tuesday','Wednesday',
+            'Thursday','Friday','Saturday','Sunday'
+        ];
+        const sorted = dayOrder.map(d =>
+            byDay.find(r => r.day_of_week === d) ||
+            { day_of_week: d, total_trips: 0, is_weekend: 0 }
+        );
+        dayChart = new Chart(document.getElementById('dayChart'), {
+            type: 'bar',
+            data: {
+                labels: sorted.map(r => r.day_of_week.substring(0, 3)),
+                datasets: [{
+                    label: 'Total Trips',
+                    data: sorted.map(r => r.total_trips),
+                    backgroundColor: sorted.map(r =>
+                        r.is_weekend ? '#3b82f6' : '#f7c948'
+                    ),
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { labels: { color: '#e2e8f0' } } },
+                scales: {
+                    x: { ticks: { color: '#94a3b8' }, grid: { color: '#1e293b' } },
+                    y: { ticks: { color: '#94a3b8' }, grid: { color: '#334155' } }
+                }
+            }
+        });
+    }
+}
+
+async function loadTopRoutes() {
+    const routes = await fetchData(`${API}/api/trips/top-routes?limit=10`);
+    if (!routes) return;
+    const tbody = document.getElementById('routes-table');
+    tbody.innerHTML = routes.map(r => `
+        <tr>
+            <td>${r.pickup_zone}</td>
+            <td>${r.dropoff_zone}</td>
+            <td>${Number(r.total_trips).toLocaleString()}</td>
+            <td>$${r.avg_fare}</td>
+            <td>${r.avg_distance} mi</td>
+        </tr>
+    `).join('');
+}
+
+async function applyFilters() {
+    const borough = document.getElementById('borough-filter').value;
+    await loadCharts(borough);
+}
+
+function resetFilters() {
+    document.getElementById('borough-filter').value = '';
+    document.getElementById('time-filter').value = '';
+    document.getElementById('day-filter').value = '';
+    loadCharts();
+}
+
+async function init() {
+    await loadStats();
+    await loadBoroughs();
+    await loadCharts();
+    await loadTopRoutes();
+}
+
+init();
+</script>
+</body>
+</html>
