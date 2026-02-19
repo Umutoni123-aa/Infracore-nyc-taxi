@@ -1,4 +1,4 @@
-# STEP 1: CLEAN THE RAW TAXI DATA
+cd# STEP 1: CLEAN THE RAW TAXI DATA
 # What this file does:
 # - Loads the raw NYC taxi trip data
 # - Removes bad or impossible records
