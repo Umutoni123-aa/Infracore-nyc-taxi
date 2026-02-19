@@ -4,8 +4,6 @@
 # - Removes bad or impossible records
 # - Creates new useful columns from existing ones
 # - Saves the cleaned data for the database
-# ==========================   
-
 import pandas as pd
 import os
 import json
