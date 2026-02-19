@@ -331,6 +331,17 @@ def top_routes():
         return jsonify({"success": True, "data": data})
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 500
+# --------------------------------------------------
+# ROUTE: ZONE RANKINGS (Custom Algorithm)
+# --------------------------------------------------
+@app.route('/api/zone-rankings')
+def zone_rankings():
+    try:
+        from algorithm import rank_zones
+        ranked = rank_zones()
+        return jsonify({"success": True, "data": ranked[:20]})
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
 
 
 # --------------------------------------------------
