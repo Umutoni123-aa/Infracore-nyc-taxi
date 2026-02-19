@@ -1,0 +1,10 @@
+{
+    "total_trips": 2827108,
+    "avg_fare": 18.48,
+    "avg_distance": 3.31,
+    "avg_duration_mins": 15.04,
+    "avg_speed_mph": 11.52,
+    "avg_tip_percentage": 20.71,
+    "top_pickup_borough": "Manhattan",
+    "peak_hour": 18
+}

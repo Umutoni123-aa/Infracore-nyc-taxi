@@ -1,0 +1,18 @@
+{
+    "date": "2026-02-19 22:33:04.664038",
+    "original_rows": 2964624,
+    "removed": {
+        "duplicates": 0,
+        "missing_critical": 0,
+        "fare is zero or negative": 38341,
+        "distance is zero or negative": 56569,
+        "distance over 200 miles (impossible in NYC)": 31,
+        "fare over $1000 (suspicious)": 1,
+        "passenger count invalid (must be 1-6)": 30703,
+        "dropoff time is before or same as pickup": 109,
+        "trip longer than 24 hours": 10,
+        "trip shorter than 1 minute": 8438
+    },
+    "final_rows": 2827108,
+    "percentage_kept": 95.36
+}

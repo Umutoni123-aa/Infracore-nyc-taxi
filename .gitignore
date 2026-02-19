@@ -1,5 +1,12 @@
-﻿# Data files (too large for GitHub)
-data/
+﻿# Large data files only (not the folder)
+data/*.parquet
+data/*.zip
+data/*.db
+data/taxi_zones_extracted/
+
+# Keep cleaned folder structure but ignore contents
+data/cleaned/*.parquet
+data/cleaned/*.csv
 
 # Python
 __pycache__/
@@ -12,7 +19,6 @@ __pycache__/
 *.egg-info/
 venv/
 env/
-
 # Environment
 .env
 
@@ -24,8 +30,5 @@ env/
 .DS_Store
 Thumbs.db
 
-# Generated docs
-docs/
-
-# Node
+# Node (if you add frontend build tools later)
 node_modules/
