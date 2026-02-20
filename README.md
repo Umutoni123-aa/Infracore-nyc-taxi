@@ -6,12 +6,13 @@ An interactive fullstack web application that explores 2.8 million NYC Yellow Ta
 
 It processes raw NYC TLC taxi trip data, cleans and stores it in a relational database, and serves it through a REST API to an interactive frontend dashboard.
 
-Video Walkthrough:
-[]
-Team participation sheet:
-[https://docs.google.com/spreadsheets/d/18kW75lxI9qypNfLS9YEmKdMNFrf3Kbxuc84cB7COxuo/edit?gid=0#gid=0]
-Documentation:
-[https://docs.google.com/document/d/1qRC5_qiZFRpXds4WPGzhzCGR6XNvm_H7fYpCxO5y1Mw/edit?tab=t.0]
+Video Walkthrough:   https://www.youtube.com/watch?v=J-GsdoH22Gg
+
+
+Team participation sheet: [https://docs.google.com/spreadsheets/d/18kW75lxI9qypNfLS9YEmKdMNFrf3Kbxuc84cB7COxuo/edit?gid=0#gid=0]
+
+
+Documentation: [https://docs.google.com/document/d/1qRC5_qiZFRpXds4WPGzhzCGR6XNvm_H7fYpCxO5y1Mw/edit?tab=t.0]
 
 ## Features
 
